@@ -10,10 +10,12 @@ package-mode = false
 python = ">=3.10, <3.11"
 apache-airflow = "^2.10.2"
 h3 = "^4.1.1"
+geopandas = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
+jupyterlab = "^4.2.5"
 
 [build-system]
 requires = ["poetry-core"]
