@@ -46,6 +46,6 @@ def preprocess_fire_stations_dataframe(
     return fire_stations_df
 
 
-def store_fire_stations_data(fire_stations_df: pd.DataFrame) -> None:
+def store_fire_stations_dataframe(fire_stations_df: pd.DataFrame) -> None:
     """Store the fire stations data locally."""
     fire_stations_df.to_csv("data/fire_stations.csv")
