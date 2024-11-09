@@ -1,4 +1,5 @@
 import io
+import logging
 import zipfile
 
 import pandas as pd
@@ -6,10 +7,14 @@ import requests
 
 from src.constants import GEONORGE_FIRE_STATIONS_COLUMN_MAP, GEONORGE_FIRE_STATIONS_URL
 
+logger = logging.getLogger(__name__)
+
 
 def fetch_fire_stations_data_from_geonorge() -> str:
     """Load data on fire stations in Norway from Geonorge and return the content as a string."""
+    logger.info("Fetching fire stations data from Geonorge.")
     response = requests.get(GEONORGE_FIRE_STATIONS_URL)
+    logger.info(f"Response status code: {response.status_code}")
     response.raise_for_status()
     return _extract_text_from_response(response=response)
 

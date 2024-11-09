@@ -1,13 +1,7 @@
-import pandas as pd
+from typing import Any
+
 import pendulum
 from airflow.decorators import dag, task
-
-from src.load_firestations_data import (
-    fetch_fire_stations_data_from_geonorge,
-    parse_fire_stations_text_data_into_dataframe,
-    preprocess_fire_stations_dataframe,
-    store_fire_stations_dataframe,
-)
 
 
 @dag(
@@ -23,34 +17,26 @@ def geodata_dag():
 
     @task()
     def fetch_fire_stations_data() -> str:
-        """
-        #### Fetch Fire Stations Data task
-        Fetches data on fire stations in Norway from Geonorge.
-        """
+        from src.load_firestations_data import fetch_fire_stations_data_from_geonorge
+
         return fetch_fire_stations_data_from_geonorge()
 
     @task(multiple_outputs=True)
-    def parse_text_response_into_dataframe(input_text: str) -> pd.DataFrame:
-        """
-        #### Parse Text Response into DataFrame task
-        Parses the text content of the Geonorge response as a DataFrame.
-        """
+    def parse_text_response_into_dataframe(input_text: str) -> Any:
+        from src.load_firestations_data import parse_fire_stations_text_data_into_dataframe
+
         return parse_fire_stations_text_data_into_dataframe(input_text=input_text)
 
     @task()
-    def preprocess_fire_stations_data(fire_stations_df: pd.DataFrame) -> pd.DataFrame:
-        """
-        #### Preprocess Fire Stations DataFrame task
-        Removes unused columns, renames columns, and ensures consistent capitalization.
-        """
+    def preprocess_fire_stations_data(fire_stations_df: Any) -> Any:
+        from src.load_firestations_data import preprocess_fire_stations_dataframe
+
         return preprocess_fire_stations_dataframe(fire_stations_df=fire_stations_df)
 
     @task()
-    def store_fire_stations_data(fire_stations_df: pd.DataFrame) -> None:
-        """
-        #### Store Fire Stations Data task
-        Stores the fire stations data locally.
-        """
+    def store_fire_stations_data(fire_stations_df: Any) -> None:
+        from src.load_firestations_data import store_fire_stations_dataframe
+
         store_fire_stations_dataframe(fire_stations_df=fire_stations_df)
 
     fire_stations_text = fetch_fire_stations_data()
@@ -59,4 +45,4 @@ def geodata_dag():
     store_fire_stations_data(preprocessed_fire_stations)
 
 
-geodata_dag()
+dag = geodata_dag()
